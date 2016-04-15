@@ -1,10 +1,11 @@
 package findAndHighlight;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URL;
+import java.io.Reader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -29,20 +30,44 @@ public class UtilsFAH extends FindAndHighlight {
 
 	public static String getPath3(int x) {
 		Path p3 = Paths
-				.get("\\Users\\Erin\\workspace_grandcircus\\FindAndHighlight\\src\\Files\\htmlFile" + x + ".html");
+				.get("\\Users\\Erin\\workspace_grandcircus\\FindAndHighlight\\src\\Files\\htmlFile" + x + ".txt");
 		String pathLoc3 = p3.toString();
 		return pathLoc3;
 	}
 
-	public static ArrayList<String> makeArrayListOfWords() throws FileNotFoundException {
+	public static Reader getPath4(int x) {
+		Path p4 = Paths
+				.get("\\Users\\Erin\\workspace_grandcircus\\FindAndHighlight\\src\\Files\\htmlFile" + x + ".txt");
+		Reader pathLoc4 = (Reader) p4;
+		return pathLoc4;
+	}
 
-		Scanner sc = new Scanner(new File(getPath1()));
+	public static String getPath5(int x) {
+		Path p5 = Paths
+				.get("\\Users\\Erin\\workspace_grandcircus\\FindAndHighlight\\src\\Files\\htmlFile" + x + ".html");
+		String pathLoc5 = p5.toString();
+		return pathLoc5;
+	}
+
+	public static String getPath6() {
+		Path p6 = Paths
+				.get("\\Users\\Erin\\workspace_grandcircus\\FindAndHighlight\\src\\Files\\listOfWhatAndWhere.txt");
+		String pathLoc6 = p6.toString();
+		return pathLoc6;
+	}
+
+	public static ArrayList<String> makeArrayListOfWords() throws FileNotFoundException {
+		BufferedReader br = new BufferedReader(new FileReader(getPath1()));
 
 		ArrayList<String> theWords = new ArrayList<String>();
-		while (sc.hasNextLine()) {
-			theWords.add(sc.nextLine());
+		String line;
+		try {
+			while ((line = br.readLine()) != null) {
+				theWords.add(line);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		sc.close();
 		return theWords;
 	}
 
@@ -61,17 +86,15 @@ public class UtilsFAH extends FindAndHighlight {
 	public static String fetch(String urlEx) {
 
 		try {
-			Document doc = Jsoup.connect(urlEx).get();
+			Document doc = Jsoup.connect(urlEx).followRedirects(false).get();
 			String wasADocument = doc.toString();
 			return wasADocument;
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		return null;
 
 	}
-
 }
